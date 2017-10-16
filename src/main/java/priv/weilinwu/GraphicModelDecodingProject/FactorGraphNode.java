@@ -3,7 +3,19 @@ package priv.weilinwu.GraphicModelDecodingProject;
 public class FactorGraphNode {
 	private FactorGraphEdge incomingEdge;
 	private FactorGraphEdge outgoingEdge;
-	private boolean functionNodeFlag;
+	private final boolean functionNodeFlag;
+	private double[] distibutionBasedOnZ;  
+	
+	FactorGraphNode(double[] distribution) {
+		functionNodeFlag = false;
+		distibutionBasedOnZ = new double[2];
+		distibutionBasedOnZ[0] = distribution[0];
+		distibutionBasedOnZ[1] = distribution[1];	
+	}
+	
+	FactorGraphNode() {	
+		functionNodeFlag = true;
+	}
 	
 	public void setIncomingEdge(FactorGraphEdge edge) {
 		incomingEdge = edge;
@@ -11,10 +23,6 @@ public class FactorGraphNode {
 	
 	public void setOutgoingEdge(FactorGraphEdge edge) {
 		outgoingEdge = edge;
-	}
-	
-	public void setFunctionNodeFlag(boolean b) {
-		functionNodeFlag = b;
 	}
 	
 	public FactorGraphEdge getIncomingEdge() {
