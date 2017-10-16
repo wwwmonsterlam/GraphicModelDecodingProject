@@ -8,13 +8,20 @@ public class FactorGraphNode {
 	
 	FactorGraphNode(double[] distribution) {
 		functionNodeFlag = false;
+		
 		distibutionBasedOnZ = new double[2];
 		distibutionBasedOnZ[0] = distribution[0];
 		distibutionBasedOnZ[1] = distribution[1];	
+		
+		incomingEdge = null;
+		outgoingEdge = null;
 	}
 	
 	FactorGraphNode() {	
 		functionNodeFlag = true;
+
+		incomingEdge = null;
+		outgoingEdge = null;
 	}
 	
 	public void setIncomingEdge(FactorGraphEdge edge) {
