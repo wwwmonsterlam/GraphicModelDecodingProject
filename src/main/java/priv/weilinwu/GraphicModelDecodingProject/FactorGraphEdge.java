@@ -37,6 +37,14 @@ public class FactorGraphEdge {
 		return nextOutgoingEdge;
 	}
 	
+	public FactorGraphNode getTailNode() {
+		return tail;
+	}
+	
+	public FactorGraphNode getHeadNode() {
+		return head;
+	}
+	
 	public void setMessage(double[] m) {
 		message[0] = m[0];
 		message[1] = m[1];

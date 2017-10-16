@@ -29,8 +29,8 @@ public class DecodingUtils {
 			nodes[i] = new FactorGraphNode();
 		}
 		
-		// create edges x0f7 means a directed edge with tail on nodes[0] and head on nodes[7]
-		// where x denotes a variable node and f denotes a function node
+		// create edges. x0f7 means a directed edge with tail on nodes[0] and head on nodes[7]
+		// x denotes a variable node and f denotes a function node
 		FactorGraphEdge[] edges = new FactorGraphEdge[24];
 		edges[0] = new FactorGraphEdge(nodes[0], nodes[7]); //x0f7
 		edges[1] = new FactorGraphEdge(nodes[7], nodes[0]); //f7x0
@@ -58,7 +58,33 @@ public class DecodingUtils {
 		edges[23] = new FactorGraphEdge(nodes[9], nodes[6]); //f9x6
 		
 		// build connections between nodes and edges according to Orthogonal List
+		for(FactorGraphEdge edge : edges) {
+			// add this edge to tail node as its outgoing edge
+			FactorGraphNode tailNode = edge.getTailNode();
+			if(tailNode.getOutgoingEdge() == null) {
+				tailNode.setOutgoingEdge(edge);
+			} else {
+				FactorGraphEdge outgoingEdgeOfNode = tailNode.getOutgoingEdge();
+				while(outgoingEdgeOfNode.getNextOutgoingEdge() != null) {
+					outgoingEdgeOfNode = outgoingEdgeOfNode.getNextOutgoingEdge();
+				}
+				outgoingEdgeOfNode.setNextOutgoingEdge(edge);
+			}
+			
+			// add this edge to head node as its incoming edge
+			FactorGraphNode headNode = edge.getHeadNode();
+			if(headNode.getIncomingEdge() == null) {
+				headNode.setIncomingEdge(edge);
+			} else {
+				FactorGraphEdge incomingEdgeOfNode = headNode.getIncomingEdge();
+				while(incomingEdgeOfNode.getNextIncomingEdge() != null) {
+					incomingEdgeOfNode = incomingEdgeOfNode.getNextIncomingEdge();
+				}
+				incomingEdgeOfNode.setNextIncomingEdge(edge);
+			}
+		}
 		
+		return nodes;
 	}
 	
 	public void sumProductDecoding(FactorGraphNode[] factorGraph) {
