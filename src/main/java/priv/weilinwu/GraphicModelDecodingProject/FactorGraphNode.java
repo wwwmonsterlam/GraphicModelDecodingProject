@@ -44,7 +44,11 @@ public class FactorGraphNode {
 		return functionNodeFlag;
 	}
 	
-	public void passMessages() {
+	public void passMessagesSumProductAlgo() {
+		
+	}
+	
+	public void passMessagesMaxProductAlgo() {
 		
 	}
 	
