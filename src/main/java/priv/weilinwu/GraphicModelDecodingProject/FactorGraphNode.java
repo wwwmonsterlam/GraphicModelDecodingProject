@@ -61,7 +61,10 @@ public class FactorGraphNode {
 						tempMessage = OtherUtils.productOfTwoArraysWithSizeTwo(tempMessage, tempIncomingEdge.getMessage());
 					}
 					tempIncomingEdge = tempIncomingEdge.getNextIncomingEdge();
-				}		
+				}
+				
+				// update the message on the target edge
+				targetEdge.setMessage(tempMessage);
 				
 				targetEdge = targetEdge.getNextOutgoingEdge();
 			}

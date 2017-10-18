@@ -50,7 +50,15 @@ public class FactorGraphEdge {
 	}
 	
 	public void setMessage(double[] m) {
-		message[0] = m[0];
-		message[1] = m[1];
+		if(m == null || m.length != 2) {
+			System.out.println("Error!! Illegal message!");
+			return;
+		}
+		
+		// normalize the message so that it won't get too small nor too large
+		double a = m[0] / (m[0] + m[1]);
+		double b = 1 - a;
+		message[0] = a;
+		message[1] = b;
 	}
 }
