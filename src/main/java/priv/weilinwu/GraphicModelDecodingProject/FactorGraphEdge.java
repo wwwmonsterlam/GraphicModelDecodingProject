@@ -4,13 +4,15 @@ public class FactorGraphEdge {
 	
 	private final FactorGraphNode tail;
 	private final FactorGraphNode head;
+	private final String name;
 	private FactorGraphEdge nextIncomingEdge;
 	private FactorGraphEdge nextOutgoingEdge;
 	private double[] message;
 	
-	FactorGraphEdge(FactorGraphNode t, FactorGraphNode h) {
+	FactorGraphEdge(FactorGraphNode t, FactorGraphNode h, String n) {
 		tail = t;
 		head = h;
+		name = n;
 		
 		// for sum-product algorithm, the initial message on each edge should be 1
 		message = new double[2];
@@ -43,6 +45,10 @@ public class FactorGraphEdge {
 	
 	public FactorGraphNode getHeadNode() {
 		return head;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public double[] getMessage() {
