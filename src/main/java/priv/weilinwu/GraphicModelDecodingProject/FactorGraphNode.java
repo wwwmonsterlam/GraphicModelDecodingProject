@@ -44,7 +44,7 @@ public class FactorGraphNode {
 		return functionNodeFlag;
 	}
 	
-	public void passMessagesWtihSumProductAlgo() {
+	public void passMessagesUsingSumProductAlgo() {
 		// the messages sent from a function node and a variable node follow different rules
 		if(isFunctionNode()) {
 			// this is a function node
@@ -65,10 +65,28 @@ public class FactorGraphNode {
 				}
 				
 				double[] tempMessage = new double[2];
-				// when the variable in the head node of the target edge equals to 0
-				// there are 8 combination of the 3 incoming edge messages, i.e., 000, 001, ..., 111
-				// the function of the this function node is specified in the report
 				
+				// when the variable in the head node of the target edge equals to 0
+				// there are 8 combinations of the 4 edge messages, i.e., 0000, 0001, ..., 0111
+				// the function of the this function node is specified in the report
+				// if in the combination of the four variables there are even 1s, the function equals to 1
+				double sum0 = 0.0;
+				for(int j = 0; j < 8; j++) {
+					sum0 += ((Integer.bitCount(j) + 1) % 2) * incomingMessages[0][j & 1] *
+							incomingMessages[1][(j >>> 1) & 1] * incomingMessages[2][(j >>> 2) & 1];
+				}
+				tempMessage[0] = sum0;
+				
+				// when the variable in the head node of the target edge equals to 0
+				// there are 8 combinations of the 4 edge messages, i.e., 1000, 1001, ..., 1111
+				// the function of the this function node is specified in the report
+				// if in the combination of the four variables there are even 1s, the function equals to 1
+				double sum1 = 0.0;
+				for(int j = 0; j < 8; j++) {
+					sum1 += (Integer.bitCount(j) % 2) * incomingMessages[0][j & 1] *
+							incomingMessages[1][(j >>> 1) & 1] * incomingMessages[2][(j >>> 2) & 1];
+				}
+				tempMessage[1] = sum1;
 				
 				// update the message on the target edge
 				targetEdge.setMessage(tempMessage);
@@ -99,7 +117,7 @@ public class FactorGraphNode {
 		}
 	}
 	
-	public void passMessagesWtihMaxProductAlgo() {
+	public void passMessagesUsingMaxProductAlgo() {
 		
 	}
 	
