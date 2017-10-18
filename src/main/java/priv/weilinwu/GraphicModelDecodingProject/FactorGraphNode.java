@@ -139,6 +139,8 @@ public class FactorGraphNode {
 			System.out.println("The incoming message on edge {" + tempIncomingEdge.getName() + "} is: " +
 					tempMessage[0] + "," + tempMessage[1]);
 			summaryMessage = OtherUtils.productOfTwoArraysWithSizeTwo(summaryMessage, tempMessage);
+			
+			tempIncomingEdge = tempIncomingEdge.getNextIncomingEdge();
 		}
 		
 		// normalize the summary

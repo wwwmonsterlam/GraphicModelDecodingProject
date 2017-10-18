@@ -82,10 +82,12 @@ public class DecodingUtils {
 		
 		// get message summary of each variable node 
 		int[] result = new int[7];
-		System.out.print("The result of sum-product-algo decoding is: ");
 		for(int i = 0; i < 7; i++) {
 			result[i] = factorGraph[i].messageSummaryUsingSumProductAlgo();
-			System.out.print(result[i]);
+		}
+		System.out.print("The result of sum-product-algo decoding is: ");
+		for(int a : result) {
+			System.out.print(a);
 		}
 		System.out.println("\n");
 		
