@@ -44,11 +44,18 @@ public class FactorGraphNode {
 		return functionNodeFlag;
 	}
 	
-	public void passMessagesSumProductAlgo() {
+	public void passMessagesWtihSumProductAlgo() {
+		FactorGraphEdge targetEdge = this.outgoingEdge;
+		while(targetEdge != null) {
+			// multiply all the message carried on each incoming edge 
+			// (except for the one corresponding to the target edge)
+			
+			targetEdge = targetEdge.getNextOutgoingEdge();
+		}
 		
 	}
 	
-	public void passMessagesMaxProductAlgo() {
+	public void passMessagesWtihMaxProductAlgo() {
 		
 	}
 	

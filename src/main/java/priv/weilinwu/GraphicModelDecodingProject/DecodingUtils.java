@@ -9,10 +9,10 @@ public class DecodingUtils {
 		return Math.sqrt(variance) * random.nextGaussian();
 	}
 	
-	public double[] probabilityXBaxedOnZ(double receivedValueZ, double variance) {
-		// probability of x equaling to 1 based on z
-		double p1 = 1 / (Math.exp(2 * receivedValueZ / variance) + 1);
-		// probability of x equaling to 0 based on z
+	public double[] probabilityZiBaxedOnXi(double receivedValueZ, double variance) {
+		// probability of z based on x equaling to 1
+		double p1 = Math.exp(-(receivedValueZ + 1) / 2 / variance) / Math.sqrt(Math.PI * 2 * variance);
+		// probability of z based on x equaling to 0
 		double p0 = 1 - p1;
 		return new double[] {p0, p1};
 	}
@@ -23,7 +23,7 @@ public class DecodingUtils {
 		FactorGraphNode[] nodes = new FactorGraphNode[10];
 		for(int i = 0; i < 7; i++) {
 			double receivedValueZ = noiseGenerator(variance) + 1;
-			nodes[i] = new FactorGraphNode(probabilityXBaxedOnZ(receivedValueZ, variance));
+			nodes[i] = new FactorGraphNode(probabilityZiBaxedOnXi(receivedValueZ, variance));
 		}
 		for(int i = 7; i < 10; i++) {
 			nodes[i] = new FactorGraphNode();

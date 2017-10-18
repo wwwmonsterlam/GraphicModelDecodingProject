@@ -14,8 +14,8 @@ public class FactorGraphEdge {
 		
 		// for sum-product algorithm, the initial message on each edge should be 1
 		message = new double[2];
-		message[0] = 1.0;
-		message[1] = 1.0;
+		message[0] = 0.5;
+		message[1] = 0.5;
 		
 		nextIncomingEdge = null;
 		nextOutgoingEdge = null;
