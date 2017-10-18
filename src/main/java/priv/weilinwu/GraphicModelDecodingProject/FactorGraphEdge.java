@@ -45,6 +45,10 @@ public class FactorGraphEdge {
 		return head;
 	}
 	
+	public double[] getMessage() {
+		return new double[] {message[0], message[1]};
+	}
+	
 	public void setMessage(double[] m) {
 		message[0] = m[0];
 		message[1] = m[1];

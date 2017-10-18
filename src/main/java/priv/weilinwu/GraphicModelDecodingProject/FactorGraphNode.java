@@ -4,14 +4,14 @@ public class FactorGraphNode {
 	private FactorGraphEdge incomingEdge;
 	private FactorGraphEdge outgoingEdge;
 	private final boolean functionNodeFlag;
-	private double[] distibutionBasedOnZ;  
+	private double[] distibutionBasedOnX;  
 	
 	FactorGraphNode(double[] distribution) {
 		functionNodeFlag = false;
 		
-		distibutionBasedOnZ = new double[2];
-		distibutionBasedOnZ[0] = distribution[0];
-		distibutionBasedOnZ[1] = distribution[1];	
+		distibutionBasedOnX = new double[2];
+		distibutionBasedOnX[0] = distribution[0];
+		distibutionBasedOnX[1] = distribution[1];	
 		
 		incomingEdge = null;
 		outgoingEdge = null;
@@ -45,14 +45,27 @@ public class FactorGraphNode {
 	}
 	
 	public void passMessagesWtihSumProductAlgo() {
-		FactorGraphEdge targetEdge = this.outgoingEdge;
-		while(targetEdge != null) {
-			// multiply all the message carried on each incoming edge 
-			// (except for the one corresponding to the target edge)
+		// the messages sent from a function node and a variable node follow different rules
+		if(isFunctionNode()) {
 			
-			targetEdge = targetEdge.getNextOutgoingEdge();
+		} else {
+			// update message on each outgoing edge
+			FactorGraphEdge targetEdge = this.outgoingEdge;
+			while(targetEdge != null) {
+				// multiply all the message carried on each incoming edge 
+				// (except for the one corresponding to the target edge)
+				double[] tempMessage = this.distibutionBasedOnX;
+				FactorGraphEdge tempIncomingEdge = this.incomingEdge;
+				while(tempIncomingEdge != null) {
+					if(!targetEdge.getHeadNode().equals(tempIncomingEdge.getTailNode())) {
+						tempMessage = OtherUtils.productOfTwoArraysWithSizeTwo(tempMessage, tempIncomingEdge.getMessage());
+					}
+					tempIncomingEdge = tempIncomingEdge.getNextIncomingEdge();
+				}		
+				
+				targetEdge = targetEdge.getNextOutgoingEdge();
+			}
 		}
-		
 	}
 	
 	public void passMessagesWtihMaxProductAlgo() {
