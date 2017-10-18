@@ -4,14 +4,14 @@ public class FactorGraphNode {
 	private FactorGraphEdge incomingEdge;
 	private FactorGraphEdge outgoingEdge;
 	private final boolean functionNodeFlag;
-	private double[] distibutionBasedOnX;  
+	private double[] zDistibutionBasedOnX;  
 	
 	FactorGraphNode(double[] distribution) {
 		functionNodeFlag = false;
 		
-		distibutionBasedOnX = new double[2];
-		distibutionBasedOnX[0] = distribution[0];
-		distibutionBasedOnX[1] = distribution[1];	
+		zDistibutionBasedOnX = new double[2];
+		zDistibutionBasedOnX[0] = distribution[0];
+		zDistibutionBasedOnX[1] = distribution[1];	
 		
 		incomingEdge = null;
 		outgoingEdge = null;
@@ -38,6 +38,15 @@ public class FactorGraphNode {
 	
 	public FactorGraphEdge getOutgoingEdge() {
 		return outgoingEdge;
+	}
+	
+	public double[] getZDistibutionBasedOnX() {
+		if(isFunctionNode()) {
+			System.out.println("Error! It's not a variable node");
+			return null;
+		}
+		
+		return new double[] {zDistibutionBasedOnX[0], zDistibutionBasedOnX[1]};
 	}
 	
 	public boolean isFunctionNode() {
@@ -93,7 +102,7 @@ public class FactorGraphNode {
 				// update the message on the target edge
 				targetEdge.setMessage(tempMessage);
 				System.out.println("The following message is passed through edge {" + targetEdge.getName() + "}: " +
-						tempMessage[0] + "," + tempMessage[1]);
+						targetEdge.getMessage()[0] + "," + targetEdge.getMessage()[1]);
 				
 				targetEdge = targetEdge.getNextOutgoingEdge();
 			}			
@@ -104,13 +113,13 @@ public class FactorGraphNode {
 			while(targetEdge != null) {
 				// multiply all the message carried on each incoming edge 
 				// (except for the one corresponding to the target edge)
-				double[] tempMessage = this.distibutionBasedOnX;
+				double[] tempMessage = this.zDistibutionBasedOnX;
 				FactorGraphEdge tempIncomingEdge = this.incomingEdge;
 				while(tempIncomingEdge != null) {
 					if(!targetEdge.getHeadNode().equals(tempIncomingEdge.getTailNode())) {
-						tempMessage = OtherUtils.productOfTwoArraysWithSizeTwo(tempMessage, tempIncomingEdge.getMessage());
 						System.out.println("The incoming message on edge {" + tempIncomingEdge.getName() + "} is: " +
-								tempMessage[0] + "," + tempMessage[1]);
+								tempIncomingEdge.getMessage()[0] + "," + tempIncomingEdge.getMessage()[1]);
+						tempMessage = OtherUtils.productOfTwoArraysWithSizeTwo(tempMessage, tempIncomingEdge.getMessage());
 					}
 					tempIncomingEdge = tempIncomingEdge.getNextIncomingEdge();
 				}
@@ -118,7 +127,7 @@ public class FactorGraphNode {
 				// update the message on the target edge
 				targetEdge.setMessage(tempMessage);
 				System.out.println("The following message is passed through edge {" + targetEdge.getName() + "}: " +
-						tempMessage[0] + "," + tempMessage[1]);
+						targetEdge.getMessage()[0] + "," + targetEdge.getMessage()[1]);
 				
 				targetEdge = targetEdge.getNextOutgoingEdge();
 			}
@@ -132,7 +141,7 @@ public class FactorGraphNode {
 		
 		// get the product of all incoming message
 		FactorGraphEdge tempIncomingEdge = this.getIncomingEdge();
-		double[] summaryMessage = this.distibutionBasedOnX;
+		double[] summaryMessage = this.zDistibutionBasedOnX;
 		double[] tempMessage;
 		while(tempIncomingEdge != null) {
 			tempMessage = tempIncomingEdge.getMessage();

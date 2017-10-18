@@ -18,7 +18,7 @@ public class OtherUtils {
 	
 	public static double[] probabilityZiBaxedOnXi(double receivedValueZ, double variance) {
 		// probability of z based on x equaling to 1
-		double p1 = Math.exp(-(receivedValueZ + 1) / 2 / variance) / Math.sqrt(Math.PI * 2 * variance);
+		double p1 = Math.exp(-(receivedValueZ + 1) * (receivedValueZ + 1) / 2 / variance) / Math.sqrt(Math.PI * 2 * variance);
 		// probability of z based on x equaling to 0
 		double p0 = 1 - p1;
 		return new double[] {p0, p1};

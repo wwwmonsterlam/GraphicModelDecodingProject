@@ -3,11 +3,16 @@ package priv.weilinwu.GraphicModelDecodingProject;
 public class DecodingUtils {
 	
 	public FactorGraphNode[] factorGraphGenerator(double variance) {
+		double[] zForTest = {-1.5396033728305016, 0.7755690724753739, 1.2665001389508268, 
+				-0.5590966247869689, 0.9727180864699638, 3.1220087035723947, -0.08738168884218944};
+		
+		// suppose x1, x2, ..., x7 are 0,0,0,0,0,0,0
 		// here Orthogonal List is used to represent the factor graph
 		// construct 7 variable node and 3 function node
 		FactorGraphNode[] nodes = new FactorGraphNode[10];
 		for(int i = 0; i < 7; i++) {
 			double receivedValueZ = OtherUtils.noiseGenerator(variance) + 1;
+			receivedValueZ = zForTest[i];
 			System.out.println("Received value Z on node {" + i + "}: " + receivedValueZ);
 			nodes[i] = new FactorGraphNode(OtherUtils.probabilityZiBaxedOnXi(receivedValueZ, variance));
 		}
@@ -76,7 +81,11 @@ public class DecodingUtils {
 	public int[] sumProductDecoding(FactorGraphNode[] factorGraph) {
 		// proceed one iteration
 		for(int i = 0; i < 10; i++) {
-			System.out.println("Processing node " + i + ":");
+			System.out.println("* Processing node " + i + ":");
+			if(i < 7) {
+				System.out.println("The z distribution based on x is: " + factorGraph[i].getZDistibutionBasedOnX()[0] +
+						"," + factorGraph[i].getZDistibutionBasedOnX()[1]);
+			}
 			factorGraph[i].passMessagesUsingSumProductAlgo();
 		}
 		
