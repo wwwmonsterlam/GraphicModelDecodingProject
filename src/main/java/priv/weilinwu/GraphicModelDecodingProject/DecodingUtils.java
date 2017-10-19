@@ -12,7 +12,7 @@ public class DecodingUtils {
 		FactorGraphNode[] nodes = new FactorGraphNode[10];
 		for(int i = 0; i < 7; i++) {
 			double receivedValueZ = OtherUtils.noiseGenerator(variance) + 1;
-			receivedValueZ = zForTest[i];
+//			receivedValueZ = zForTest[i];
 			System.out.println("Received value Z on node {" + i + "}: " + receivedValueZ);
 			nodes[i] = new FactorGraphNode(OtherUtils.probabilityZiBaxedOnXi(receivedValueZ, variance));
 		}
@@ -78,29 +78,53 @@ public class DecodingUtils {
 		return nodes;
 	}
 	
-	public int[] sumProductDecoding(FactorGraphNode[] factorGraph) {
-		// proceed one iteration
-		for(int i = 0; i < 10; i++) {
-			System.out.println("* Processing node " + i + ":");
-			if(i < 7) {
-				System.out.println("The z distribution based on x is: " + factorGraph[i].getZDistibutionBasedOnX()[0] +
-						"," + factorGraph[i].getZDistibutionBasedOnX()[1]);
+	public int[] sumProductDecoding(FactorGraphNode[] factorGraph, int iterationLimit) {
+		int[] oldResult = new int[]{2, 2, 2, 2, 2, 2, 2};
+		int[] newResult = new int[7];
+		int convergenceCount = 0;
+		int n = 1;
+		while(n++ <= iterationLimit) {
+			System.out.println("********** Iteration {" + (n - 1) + "} (Limit: " + iterationLimit + ") **********");
+			for(int i = 0; i < 10; i++) {
+				System.out.println("* Processing node " + i + ":");
+				if(i < 7) {
+					System.out.println("The z distribution based on x is: " + factorGraph[i].getZDistibutionBasedOnX()[0] +
+							"," + factorGraph[i].getZDistibutionBasedOnX()[1]);
+				}
+				factorGraph[i].passMessagesUsingSumProductAlgo();
 			}
-			factorGraph[i].passMessagesUsingSumProductAlgo();
+			
+			// get message summary of each variable node 
+			for(int i = 0; i < 7; i++) {
+				System.out.println("* Summary of node {" + i + "}: "); 
+				newResult[i] = factorGraph[i].messageSummaryUsingSumProductAlgo();
+			}
+			System.out.print("The result of sum-product-algo decoding is: ");
+			for(int a : newResult) {
+				System.out.print(a);
+			}
+			System.out.println("");
+			
+			if(OtherUtils.isArraysEqual(newResult, oldResult)) {
+				System.out.println("This result is the same as the last one :)");
+				convergenceCount++;
+				if(convergenceCount == 10) {
+					System.out.println("The result converge, so the iteration stops.");
+					return newResult;
+				}
+			} else {
+				System.out.println("This result is different from the last one :(");
+				convergenceCount = 0;
+				// exchange two arrays
+				int[] temp;
+				temp = oldResult;
+				oldResult = newResult;
+				newResult = temp;
+			}
 		}
 		
-		// get message summary of each variable node 
-		int[] result = new int[7];
-		for(int i = 0; i < 7; i++) {
-			result[i] = factorGraph[i].messageSummaryUsingSumProductAlgo();
-		}
-		System.out.print("The result of sum-product-algo decoding is: ");
-		for(int a : result) {
-			System.out.print(a);
-		}
-		System.out.println("\n");
-		
-		return result;
+		System.out.println("Iteration limit is reached, so the iteration stops.");
+		return newResult;
 	}
 	
 	public void maxProductDecoding(FactorGraphNode[] factorGraph) {

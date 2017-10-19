@@ -23,4 +23,19 @@ public class OtherUtils {
 		double p0 = 1 - p1;
 		return new double[] {p0, p1};
 	}
+	
+	public static boolean isArraysEqual(int[] a, int[] b) {
+		if(a == null || b == null) {
+			System.out.println("Error! Empty array(s)!");
+			return false;
+		}
+		
+		for(int i = 0; i < a.length; i++) {
+			if(a[i] != b[i]) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }
