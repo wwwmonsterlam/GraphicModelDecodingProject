@@ -20,8 +20,8 @@ public class OtherUtils {
 		// probability of z based on x equaling to 1
 		double p1 = Math.exp(-(receivedValueZ + 1) * (receivedValueZ + 1) / 2 / variance) / Math.sqrt(Math.PI * 2 * variance);
 		// probability of z based on x equaling to 0
-		double p0 = 1 - p1;
-		return new double[] {p0, p1};
+		double p0 = Math.exp(-(receivedValueZ - 1) * (receivedValueZ - 1) / 2 / variance) / Math.sqrt(Math.PI * 2 * variance);;
+		return new double[] {p0 / (p0 + p1), p1 / (p0 + p1)};
 	}
 	
 	public static boolean isArraysEqual(int[] a, int[] b) {

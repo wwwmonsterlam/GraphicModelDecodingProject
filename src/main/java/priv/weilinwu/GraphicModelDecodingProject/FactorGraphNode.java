@@ -152,7 +152,7 @@ public class FactorGraphNode {
 			tempIncomingEdge = tempIncomingEdge.getNextIncomingEdge();
 		}
 		
-		// normalize the summary
+		// generalize the summary
 		summaryMessage[0] = summaryMessage[0] / (summaryMessage[0] + summaryMessage[1]);
 		summaryMessage[1] = 1 - summaryMessage[0];
 		System.out.println("The product of all incoming message is: " + summaryMessage[0] + ","  + summaryMessage[1]);

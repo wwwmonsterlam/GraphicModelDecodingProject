@@ -61,7 +61,7 @@ public class FactorGraphEdge {
 			return;
 		}
 		
-		// normalize the message so that it won't get too small nor too large
+		// generalize the message so that it won't get too small nor too large
 		double a = m[0] / (m[0] + m[1]);
 		double b = 1 - a;
 		message[0] = a;

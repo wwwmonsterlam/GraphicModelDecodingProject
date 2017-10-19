@@ -10,7 +10,7 @@ public class Main {
 		int errorBitCount = 0;
 		DecodingUtils decodingUtils = new DecodingUtils();
 		while(num-- > 0) {
-			int[] result = decodingUtils.sumProductDecoding(decodingUtils.factorGraphGenerator(1.0), 20);
+			int[] result = decodingUtils.sumProductDecoding(decodingUtils.factorGraphGenerator(0.25), 100);
 			for(int a : result) {
 				if(a != 0) {
 					errorBitCount++;

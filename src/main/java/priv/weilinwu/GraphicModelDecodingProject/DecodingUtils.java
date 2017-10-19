@@ -108,7 +108,7 @@ public class DecodingUtils {
 			if(OtherUtils.isArraysEqual(newResult, oldResult)) {
 				System.out.println("This result is the same as the last one :)");
 				convergenceCount++;
-				if(convergenceCount == 10) {
+				if(convergenceCount == 50) {
 					System.out.println("The result converge, so the iteration stops.");
 					return newResult;
 				}
