@@ -3,8 +3,8 @@ package priv.weilinwu.GraphicModelDecodingProject;
 public class DecodingUtils {
 	
 	public FactorGraphNode[] factorGraphGenerator(double variance) {
-		double[] zForTest = {-1.5396033728305016, 0.7755690724753739, 1.2665001389508268, 
-				-0.5590966247869689, 0.9727180864699638, 3.1220087035723947, -0.08738168884218944};
+//		double[] zForTest = {-1.5396033728305016, 0.7755690724753739, 1.2665001389508268, 
+//				-0.5590966247869689, 0.9727180864699638, 3.1220087035723947, -0.08738168884218944};
 		
 		// suppose x1, x2, ..., x7 are 0,0,0,0,0,0,0
 		// here Orthogonal List is used to represent the factor graph
@@ -13,7 +13,7 @@ public class DecodingUtils {
 		for(int i = 0; i < 7; i++) {
 			double receivedValueZ = OtherUtils.noiseGenerator(variance) + 1;
 //			receivedValueZ = zForTest[i];
-			System.out.println("Received value Z on node {" + i + "}: " + receivedValueZ);
+//			System.out.println("Received value Z on node {" + i + "}: " + receivedValueZ);
 			nodes[i] = new FactorGraphNode(OtherUtils.probabilityZiBaxedOnXi(receivedValueZ, variance));
 		}
 		for(int i = 7; i < 10; i++) {
@@ -78,42 +78,42 @@ public class DecodingUtils {
 		return nodes;
 	}
 	
-	public int[] sumProductDecoding(FactorGraphNode[] factorGraph, int iterationLimit) {
+	public int[] sumProductDecoding(FactorGraphNode[] factorGraph, int iterationLimit, int convergenceThreshold) {
 		int[] oldResult = new int[]{2, 2, 2, 2, 2, 2, 2};
 		int[] newResult = new int[7];
 		int convergenceCount = 0;
 		int n = 1;
 		while(n++ <= iterationLimit) {
-			System.out.println("********** Iteration {" + (n - 1) + "} (Limit: " + iterationLimit + ") **********");
+//			System.out.println("********** Iteration {" + (n - 1) + "} (Limit: " + iterationLimit + ") **********");
 			for(int i = 0; i < 10; i++) {
-				System.out.println("* Processing node " + i + ":");
+//				System.out.println("* Processing node " + i + ":");
 				if(i < 7) {
-					System.out.println("The z distribution based on x is: " + factorGraph[i].getZDistibutionBasedOnX()[0] +
-							"," + factorGraph[i].getZDistibutionBasedOnX()[1]);
+//					System.out.println("The z distribution based on x is: " + factorGraph[i].getZDistibutionBasedOnX()[0] +
+//							"," + factorGraph[i].getZDistibutionBasedOnX()[1]);
 				}
 				factorGraph[i].passMessagesUsingSumProductAlgo();
 			}
 			
 			// get message summary of each variable node 
 			for(int i = 0; i < 7; i++) {
-				System.out.println("* Summary of node {" + i + "}: "); 
+//				System.out.println("* Summary of node {" + i + "}: "); 
 				newResult[i] = factorGraph[i].messageSummaryUsingSumProductAlgo();
 			}
-			System.out.print("The result of sum-product-algo decoding is: ");
-			for(int a : newResult) {
-				System.out.print(a);
-			}
-			System.out.println("");
+//			System.out.print("The result of sum-product-algo decoding is: ");
+//			for(int a : newResult) {
+//				System.out.print(a);
+//			}
+//			System.out.println("");
 			
 			if(OtherUtils.isArraysEqual(newResult, oldResult)) {
-				System.out.println("This result is the same as the last one :)");
+//				System.out.println("This result is the same as the last one :)");
 				convergenceCount++;
-				if(convergenceCount == 50) {
-					System.out.println("The result converge, so the iteration stops.");
+				if(convergenceCount == convergenceThreshold) {
+//					System.out.println("The result converge, so the iteration stops.");
 					return newResult;
 				}
 			} else {
-				System.out.println("This result is different from the last one :(");
+//				System.out.println("This result is different from the last one :(");
 				convergenceCount = 0;
 				// exchange two arrays
 				int[] temp;
@@ -123,8 +123,40 @@ public class DecodingUtils {
 			}
 		}
 		
-		System.out.println("Iteration limit is reached, so the iteration stops.");
+//		System.out.println("Iteration limit is reached, so the iteration stops.");
 		return newResult;
+	}
+	public void sumProductDecoding(int num) {
+		double[] variances = new double[] {0.125, 0.25, 0.5, 1.0};
+		int totalBit = num * 7;
+		int[] errorBitCount = new int[] {0, 0, 0, 0};
+		for(int i = 0; i < 4; i++) {
+			int j = 0;
+			System.out.print("\nNow conducting sum-product algorithm with noise variance {" + variances[i] + "} ");
+			while(j++ < num) {
+				if(j % (num / 10) == 0) {
+					// indicate that it's processing 
+					System.out.print(".");
+				}
+				int[] result = sumProductDecoding(factorGraphGenerator(variances[i]), num, 20);
+				for(int a : result) {
+					if(a != 0) {
+						errorBitCount[i]++;
+					}
+				}
+			}
+		}
+		
+		// Summary of this experiment
+		System.out.println("\n\n********************** SUMMARY **********************");
+		for(int i = 0; i < 4; i++) {
+			System.out.println("Total decoding coducted: " + num);
+			System.out.println("Total bits transmitted: " + totalBit);
+			System.out.println("Variance: " + variances[i]);
+			System.out.println("Error bits count: " + errorBitCount[i]);
+			System.out.println("Bit error probability: " + (double)errorBitCount[i] / (double)totalBit);
+			System.out.println("");
+		}
 	}
 	
 	public void maxProductDecoding(FactorGraphNode[] factorGraph) {

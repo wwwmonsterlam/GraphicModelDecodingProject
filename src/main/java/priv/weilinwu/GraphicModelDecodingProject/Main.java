@@ -1,27 +1,26 @@
 package priv.weilinwu.GraphicModelDecodingProject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		System.out.print("How many times of decoding would you like me to conduct? ");
-		int num = 10000;
-		int totalBit = num * 7;
-		int errorBitCount = 0;
-		DecodingUtils decodingUtils = new DecodingUtils();
-		while(num-- > 0) {
-			int[] result = decodingUtils.sumProductDecoding(decodingUtils.factorGraphGenerator(0.25), 100);
-			for(int a : result) {
-				if(a != 0) {
-					errorBitCount++;
-				}
+		int num = getNumOfDecodingFromUser();	
+		DecodingUtils decodingUtils = new DecodingUtils();	
+		decodingUtils.sumProductDecoding(num);
+	}
+	
+	public static int getNumOfDecodingFromUser() throws IOException {		
+		while(true){
+			System.out.println("How many times of decoding would you like me to conduct? ");
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			try {
+				String s = br.readLine();
+				return Integer.parseInt(s);
+			} catch (NumberFormatException e) {
+				System.out.println("Oops! Invalid input! Please do it again~");
 			}
 		}
-		
-		// Summary of this experiment
-		System.out.println("********************** SUMMARY **********************");
-		System.out.println("Total decoding coducted: " + totalBit / 7);
-		System.out.println("Total bits transmitted: " + totalBit);
-		System.out.println("Error bits count: " + errorBitCount);
 	}
 }

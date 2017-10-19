@@ -69,8 +69,8 @@ public class FactorGraphNode {
 				while(tempIncomingEdge != null) {
 					if(!targetEdge.getHeadNode().equals(tempIncomingEdge.getTailNode())) {
 						incomingMessages[i++] = tempIncomingEdge.getMessage();
-						System.out.println("The incoming message on edge {" + tempIncomingEdge.getName() + "} is: " +
-								tempIncomingEdge.getMessage()[0] + "," + tempIncomingEdge.getMessage()[1]);
+//						System.out.println("The incoming message on edge {" + tempIncomingEdge.getName() + "} is: " +
+//								tempIncomingEdge.getMessage()[0] + "," + tempIncomingEdge.getMessage()[1]);
 					}
 					tempIncomingEdge = tempIncomingEdge.getNextIncomingEdge();
 				}
@@ -101,8 +101,8 @@ public class FactorGraphNode {
 				
 				// update the message on the target edge
 				targetEdge.setMessage(tempMessage);
-				System.out.println("The following message is passed through edge {" + targetEdge.getName() + "}: " +
-						targetEdge.getMessage()[0] + "," + targetEdge.getMessage()[1]);
+//				System.out.println("The following message is passed through edge {" + targetEdge.getName() + "}: " +
+//						targetEdge.getMessage()[0] + "," + targetEdge.getMessage()[1]);
 				
 				targetEdge = targetEdge.getNextOutgoingEdge();
 			}			
@@ -117,8 +117,8 @@ public class FactorGraphNode {
 				FactorGraphEdge tempIncomingEdge = this.incomingEdge;
 				while(tempIncomingEdge != null) {
 					if(!targetEdge.getHeadNode().equals(tempIncomingEdge.getTailNode())) {
-						System.out.println("The incoming message on edge {" + tempIncomingEdge.getName() + "} is: " +
-								tempIncomingEdge.getMessage()[0] + "," + tempIncomingEdge.getMessage()[1]);
+//						System.out.println("The incoming message on edge {" + tempIncomingEdge.getName() + "} is: " +
+//								tempIncomingEdge.getMessage()[0] + "," + tempIncomingEdge.getMessage()[1]);
 						tempMessage = OtherUtils.productOfTwoArraysWithSizeTwo(tempMessage, tempIncomingEdge.getMessage());
 					}
 					tempIncomingEdge = tempIncomingEdge.getNextIncomingEdge();
@@ -126,8 +126,8 @@ public class FactorGraphNode {
 				
 				// update the message on the target edge
 				targetEdge.setMessage(tempMessage);
-				System.out.println("The following message is passed through edge {" + targetEdge.getName() + "}: " +
-						targetEdge.getMessage()[0] + "," + targetEdge.getMessage()[1]);
+//				System.out.println("The following message is passed through edge {" + targetEdge.getName() + "}: " +
+//						targetEdge.getMessage()[0] + "," + targetEdge.getMessage()[1]);
 				
 				targetEdge = targetEdge.getNextOutgoingEdge();
 			}
@@ -145,8 +145,8 @@ public class FactorGraphNode {
 		double[] tempMessage;
 		while(tempIncomingEdge != null) {
 			tempMessage = tempIncomingEdge.getMessage();
-			System.out.println("The incoming message on edge {" + tempIncomingEdge.getName() + "} is: " +
-					tempMessage[0] + "," + tempMessage[1]);
+//			System.out.println("The incoming message on edge {" + tempIncomingEdge.getName() + "} is: " +
+//					tempMessage[0] + "," + tempMessage[1]);
 			summaryMessage = OtherUtils.productOfTwoArraysWithSizeTwo(summaryMessage, tempMessage);
 			
 			tempIncomingEdge = tempIncomingEdge.getNextIncomingEdge();
@@ -155,7 +155,7 @@ public class FactorGraphNode {
 		// generalize the summary
 		summaryMessage[0] = summaryMessage[0] / (summaryMessage[0] + summaryMessage[1]);
 		summaryMessage[1] = 1 - summaryMessage[0];
-		System.out.println("The product of all incoming message is: " + summaryMessage[0] + ","  + summaryMessage[1]);
+//		System.out.println("The product of all incoming message is: " + summaryMessage[0] + ","  + summaryMessage[1]);
 		return summaryMessage[0] > summaryMessage[1]? 0 : 1;
 	}
 	
