@@ -6,6 +6,8 @@ public class FactorGraphNode {
 	private final boolean functionNodeFlag;
 	private double[] zDistibutionBasedOnX;  
 	
+	public enum DecodingAlgorithm {SUM_PRODUCT, MAX_PRODUCT};
+	
 	FactorGraphNode(double[] distribution) {
 		functionNodeFlag = false;
 		
@@ -53,7 +55,7 @@ public class FactorGraphNode {
 		return functionNodeFlag;
 	}
 	
-	public void passMessagesUsingSumProductAlgo() {
+	public void passMessages(DecodingAlgorithm algo) {
 		// the messages sent from a function node and a variable node follow different rules
 		if(isFunctionNode()) {
 			// this is a function node
@@ -83,8 +85,13 @@ public class FactorGraphNode {
 				// if in the combination of the four variables there are even 1s, the function equals to 1
 				double sum0 = 0.0;
 				for(int j = 0; j < 8; j++) {
-					sum0 += ((Integer.bitCount(j) + 1) % 2) * incomingMessages[0][j & 1] *
+					double temp = ((Integer.bitCount(j) + 1) % 2) * incomingMessages[0][j & 1] *
 							incomingMessages[1][(j >>> 1) & 1] * incomingMessages[2][(j >>> 2) & 1];
+					if(algo == DecodingAlgorithm.SUM_PRODUCT) {
+						sum0 += temp;						// sum-product algorithm
+					} else {
+						sum0 = sum0 > temp? sum0 : temp;		// max-product algorithm
+					}
 				}
 				tempMessage[0] = sum0;
 				
@@ -94,8 +101,13 @@ public class FactorGraphNode {
 				// if in the combination of the four variables there are even 1s, the function equals to 1
 				double sum1 = 0.0;
 				for(int j = 0; j < 8; j++) {
-					sum1 += (Integer.bitCount(j) % 2) * incomingMessages[0][j & 1] *
+					double temp = (Integer.bitCount(j) % 2) * incomingMessages[0][j & 1] *
 							incomingMessages[1][(j >>> 1) & 1] * incomingMessages[2][(j >>> 2) & 1];
+					if(algo == DecodingAlgorithm.SUM_PRODUCT) {
+						sum1 += temp;					// sum-product algorithm
+					} else {
+						sum1 = sum1 > temp? sum1 : temp;	// sum-product algorithm
+					}
 				}
 				tempMessage[1] = sum1;
 				
@@ -158,12 +170,4 @@ public class FactorGraphNode {
 //		System.out.println("The product of all incoming message is: " + summaryMessage[0] + ","  + summaryMessage[1]);
 		return summaryMessage[0] > summaryMessage[1]? 0 : 1;
 	}
-	
-	public void passMessagesUsingMaxProductAlgo() {
-		
-	}
-	
-//	public int messageSummaryUsingMaxProductAlgo() {
-//		
-//	}
 }

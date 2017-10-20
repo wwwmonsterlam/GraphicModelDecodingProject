@@ -1,5 +1,7 @@
 package priv.weilinwu.GraphicModelDecodingProject;
 
+import priv.weilinwu.GraphicModelDecodingProject.FactorGraphNode.DecodingAlgorithm;
+
 public class DecodingUtils {
 	
 	public FactorGraphNode[] factorGraphGenerator(double variance) {
@@ -78,7 +80,7 @@ public class DecodingUtils {
 		return nodes;
 	}
 	
-	public int[] sumProductDecoding(FactorGraphNode[] factorGraph, int iterationLimit, int convergenceThreshold) {
+	public int[] decode(FactorGraphNode[] factorGraph, int iterationLimit, int convergenceThreshold, DecodingAlgorithm algo) {
 		int[] oldResult = new int[]{2, 2, 2, 2, 2, 2, 2};
 		int[] newResult = new int[7];
 		int convergenceCount = 0;
@@ -91,7 +93,7 @@ public class DecodingUtils {
 //					System.out.println("The z distribution based on x is: " + factorGraph[i].getZDistibutionBasedOnX()[0] +
 //							"," + factorGraph[i].getZDistibutionBasedOnX()[1]);
 				}
-				factorGraph[i].passMessagesUsingSumProductAlgo();
+				factorGraph[i].passMessages(algo);
 			}
 			
 			// get message summary of each variable node 
@@ -126,19 +128,20 @@ public class DecodingUtils {
 //		System.out.println("Iteration limit is reached, so the iteration stops.");
 		return newResult;
 	}
-	public void sumProductDecoding(int num) {
+	public void decode(int num, DecodingAlgorithm algo) {
 		double[] variances = new double[] {0.125, 0.25, 0.5, 1.0};
+		int iterationLimit = 1000;
 		int totalBit = num * 7;
 		int[] errorBitCount = new int[] {0, 0, 0, 0};
 		for(int i = 0; i < 4; i++) {
 			int j = 0;
-			System.out.print("\nNow conducting sum-product algorithm with noise variance {" + variances[i] + "} ");
+			System.out.print("\nNow conducting " + algo.toString() + " algorithm with noise variance {" + variances[i] + "} ");
 			while(j++ < num) {
 				if(j % (num / 10) == 0) {
 					// indicate that it's processing 
 					System.out.print(".");
 				}
-				int[] result = sumProductDecoding(factorGraphGenerator(variances[i]), num, 20);
+				int[] result = decode(factorGraphGenerator(variances[i]), iterationLimit, 100, algo);
 				for(int a : result) {
 					if(a != 0) {
 						errorBitCount[i]++;
@@ -148,7 +151,7 @@ public class DecodingUtils {
 		}
 		
 		// Summary of this experiment
-		System.out.println("\n\n********************** SUMMARY **********************");
+		System.out.println("\n\n********************** SUMMARY OF " + algo.toString() + " ALGORITHM DECODING **********************");
 		for(int i = 0; i < 4; i++) {
 			System.out.println("Total decoding coducted: " + num);
 			System.out.println("Total bits transmitted: " + totalBit);
@@ -157,9 +160,5 @@ public class DecodingUtils {
 			System.out.println("Bit error probability: " + (double)errorBitCount[i] / (double)totalBit);
 			System.out.println("");
 		}
-	}
-	
-	public void maxProductDecoding(FactorGraphNode[] factorGraph) {
-		
 	}
 }

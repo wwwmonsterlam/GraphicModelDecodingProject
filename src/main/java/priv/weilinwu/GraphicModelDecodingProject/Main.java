@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import priv.weilinwu.GraphicModelDecodingProject.FactorGraphNode.DecodingAlgorithm;
+
 public class Main {
 	public static void main(String[] args) throws IOException {
 		int num = getNumOfDecodingFromUser();	
 		DecodingUtils decodingUtils = new DecodingUtils();	
-		decodingUtils.sumProductDecoding(num);
+		decodingUtils.decode(num, DecodingAlgorithm.MAX_PRODUCT);
+		decodingUtils.decode(num, DecodingAlgorithm.SUM_PRODUCT);
 	}
 	
 	public static int getNumOfDecodingFromUser() throws IOException {		
