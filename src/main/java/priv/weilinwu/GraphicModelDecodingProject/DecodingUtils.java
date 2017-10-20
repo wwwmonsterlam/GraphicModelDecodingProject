@@ -128,7 +128,7 @@ public class DecodingUtils {
 //		System.out.println("Iteration limit is reached, so the iteration stops.");
 		return newResult;
 	}
-	public void decode(int num, DecodingAlgorithm algo) {
+	public double[] decode(int num, DecodingAlgorithm algo) {
 		double[] variances = new double[] {0.125, 0.25, 0.5, 1.0};
 		int iterationLimit = 1000;
 		int totalBit = num * 7;
@@ -151,14 +151,18 @@ public class DecodingUtils {
 		}
 		
 		// Summary of this experiment
+		double[] bitErrorProbabilities = new double[4];
 		System.out.println("\n\n********************** SUMMARY OF " + algo.toString() + " ALGORITHM DECODING **********************");
 		for(int i = 0; i < 4; i++) {
+			bitErrorProbabilities[i] = (double)errorBitCount[i] / (double)totalBit;
 			System.out.println("Total decoding coducted: " + num);
 			System.out.println("Total bits transmitted: " + totalBit);
-			System.out.println("Variance: " + variances[i]);
+			System.out.println("Noise variance: " + variances[i]);
 			System.out.println("Error bits count: " + errorBitCount[i]);
-			System.out.println("Bit error probability: " + (double)errorBitCount[i] / (double)totalBit);
+			System.out.println("Bit error probability: " + bitErrorProbabilities[i]);
 			System.out.println("");
 		}
+		
+		return bitErrorProbabilities;
 	}
 }
